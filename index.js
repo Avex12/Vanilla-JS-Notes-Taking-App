@@ -1,25 +1,28 @@
 const notesForm = document.querySelector("#notesForm");
 const displayNoteContainer = document.querySelector("#displayNotes");
 showNotes();
+
 // Form Handling
 notesForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(notesForm);
   const note = formData.get("note");
-  addNote(note);
+  const title = formData.get("title");
+  addNote(title, note);
 });
 
 // Show Notes
 function showNotes() {
   const notes = JSON.parse(localStorage.getItem("notes"));
   displayNoteContainer.innerHTML = "";
-  notes?.forEach((note) => {
-    displayNoteContainer.innerHTML += `<div class="card" style="width: 18rem;">
-    <div class="card-body">
+  notes?.forEach((note, index) => {
+    displayNoteContainer.innerHTML += `<div class="card" style="width: 16rem;">
+    <div class="card-body text-center">
+    <h5>${note.title}</h5>
       <p class="card-text">
-    ${note}
+    ${note.data}
       </p>
-      <button data-note="${note}" id="delete-btn" onclick="removeNote(this.dataset.note)" class="btn btn-primary">
+      <button data-noteindex='${index}' onclick="removeNote(this.dataset.noteindex)" class="btn btn-primary">
    Delete Note
       </button>
     </div>
@@ -28,25 +31,34 @@ function showNotes() {
 }
 
 // Add Notes
-function addNote(note) {
-  if (note === "") return null;
+function addNote(title, data) {
+  if (title === "" || data === "") return null;
+  const noteObj = {
+    title,
+    data,
+  };
   const notes = JSON.parse(localStorage.getItem("notes"));
   if (notes !== null) {
-    localStorage.setItem("notes", JSON.stringify([...notes, note]));
+    localStorage.setItem("notes", JSON.stringify([...notes, noteObj]));
+    alert("Note added successfully!");
     showNotes();
     return;
   }
-  localStorage.setItem("notes", JSON.stringify([note]));
+  localStorage.setItem("notes", JSON.stringify([noteObj]));
+  alert("Note added successfully!");
   showNotes();
 }
 
 // Remove Note
-function removeNote(note) {
-  if (note === "") return null;
+function removeNote(noteIndex) {
+  if (noteIndex === "") return null;
   const notes = JSON.parse(localStorage.getItem("notes"));
-  const updatedData = notes.filter((storedNote) => {
-    return storedNote !== note;
-  });
-  localStorage.setItem("notes", JSON.stringify(updatedData));
-  showNotes();
+  const confirmation = confirm(
+    `Are your sure you want to delete the note ${notes.at(noteIndex).data}`
+  );
+  if (confirmation) {
+    notes.splice(noteIndex, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+    showNotes();
+  }
 }
