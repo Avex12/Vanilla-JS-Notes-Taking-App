@@ -14,20 +14,25 @@
 </head>
 
 <body>
-    <h4 class="text-center mt-5"> Notes App</h4>
     <div class="container mt-5">
+        <h4 class="text-center">Notes App</h4>
         <form id="notesForm">
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Add Note</label>
-                <input type="text" name="note" class="form-control" id="note" aria-describedby="emailHelp">
-
+                <label for="noteTitle" class="form-label">Note Title</label>
+                <input type="text" name="title" class="form-control" id="noteTitle" required>
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mb-3">
+                <label for="noteContent" class="form-label">Note Content</label>
+                <textarea name="note" class="form-control" id="noteContent" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Note</button>
         </form>
     </div>
-    <div id="displayNotes" class="container mt-5 d-flex justify-content-center align-items-center flex-wrap gap-3">
 
+    <div class="container mt-5">
+        <div id="displayNotes" class="container mt-5 d-flex justify-content-center align-items-center flex-wrap gap-3">
+            <!-- Notes will be displayed here dynamically -->
+        </div>
     </div>
     <script src="index.js"></script>
 </body>
